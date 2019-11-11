@@ -27,4 +27,26 @@ This app is able to do the following things:
 
 
 ### Installation and running this solution
-... TODO
+To run this app in your local environment using Docker.
+If you don't have Docker installed already please visit their [installation page](https://docs.docker.com/install/) for more details.
+
+Once you have Docker installed and cloned this repo locally,
+you can run this app in a container by following these steps:
+
+* Clone this repository:
+```bash
+git clone git@github.com:andrejkn/nfl-rushing.git
+```
+
+* Change directory to the location of the cloned repository:
+```bash
+cd ~/nfl-rush
+```
+
+* Run the app in a docker container:
+```bash
+docker-compose up -d
+```
+
+* Open the app in your browser:
+[http://localhost:8000](http://localhost:8000)
