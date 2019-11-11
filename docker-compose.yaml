@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app-dev
+    working_dir: /app-dev
+    environment:
+      - PYTHONPATH=/app-dev
+      - APP_PORT=8000
+      - DEBUG=1
+    command: >
+      sh -c "uvicorn main:app --host 0.0.0.0 --reload --port 8000"
