@@ -5,7 +5,7 @@ from nflrushing import Base
 
 class PlayerRushing(Base):
     __tablename__ = 'player_rushing'
-    _id = Column(Integer, name='id', primary_key=True, autoincrement=True)
+    pid = Column(Integer, name='id', primary_key=True, autoincrement=True)
     name = Column(String(200))
     team = Column(String(50))
     position = Column(String(50))
@@ -24,4 +24,4 @@ class PlayerRushing(Base):
     rushing_fumbles = Column(Integer)
 
     def __repr__(self):
-        return f'<Player (id="{self._id}", name="{self.name}")>'
+        return f'<Player (id="{self.pid}", name="{self.name}")>'
