@@ -16,9 +16,8 @@ services:
       - DEBUG=1
     entrypoint: ""
     command: >
-      sh -c "alembic upgrade head &&
-             cd $$(pwd)/nflrushing &&
-             uvicorn main:app --host 0.0.0.0 --reload --port 8000"
+      sh -c "./wait-for.sh db:5432 -- alembic upgrade head &&
+             uvicorn nflrushing.main:app --host 0.0.0.0 --reload --port 8000"
 
   db:
     ports:
