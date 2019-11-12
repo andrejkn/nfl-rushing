@@ -1,6 +1,6 @@
 from fastapi import Query
 from pydantic import BaseModel
-from typing import List, Set
+from typing import List
 from enum import Enum
 
 from nflrushing import create_app
@@ -11,7 +11,7 @@ app = create_app()
 
 
 class PlayerRushing(BaseModel):
-    pid: int = None
+    pid: int
     name: str
     team: str
     position: str
@@ -35,6 +35,8 @@ class PlayerRushing(BaseModel):
 
 class Response(BaseModel):
     total_items: int
+    page_number: int
+    items_per_page: int
     items: List[PlayerRushing]
 
 
@@ -45,12 +47,21 @@ class OrderBy(str, Enum):
 
 
 @app.get("/players_rushing", response_model=Response)
-def players_rushing(page_number: int, items_per_page: int, order_by: List[OrderBy] = Query(None)) -> Response:
-    start = page_number * items_per_page
-    end = start + items_per_page
+def players_rushing(page_number: int = 0,
+                    items_per_page: int = None,
+                    order_by: List[OrderBy] = Query([])) -> Response:
     query = db.session.query(PlayerRushingDBModel)
 
-    # sort the players by Total Rushing Yards, Longest Rush and Total Rushing Touchdowns
+    total_items = query.count()
+
+    # if items_per_page is None then all of the items will be returned
+    items_per_page = total_items if items_per_page is None else items_per_page
+
+    # calculate start and end indices of the items that will be returned
+    start = page_number * items_per_page
+    end = start + items_per_page
+
+    # handle sorting
     if OrderBy.longest_rush in order_by:
         query = query.order_by(PlayerRushingDBModel.longest_rush)
     if OrderBy.total_rushing_touchdowns in order_by:
@@ -59,6 +70,8 @@ def players_rushing(page_number: int, items_per_page: int, order_by: List[OrderB
         query = query.order_by(PlayerRushingDBModel.total_rushing_yards)
 
     return Response(
-        total_items=query.count(),
+        total_items=total_items,
+        page_number=page_number,
+        items_per_page=items_per_page,
         items=query[start:end]
     )
