@@ -11,7 +11,7 @@ class PlayerRushing(Base):
     position = Column(String(50))
     rushing_attempts_per_game_average = Column(Float)
     rushing_attempts = Column(Integer)
-    total_rushing_yards = Column(Float)
+    total_rushing_yards = Column(Integer)
     rushing_average_yards_per_attempt = Column(Float)
     rushing_yards_per_game = Column(Float)
     total_rushing_touchdowns = Column(Integer)
