@@ -7,7 +7,7 @@ In this repo is the file [`rushing.json`](/rushing.json). It contains data about
 * `Pos` (Player's postion)
 * `Att/G` (Rushing Attempts Per Game Average)
 * `Att` (Rushing Attempts)
-* `Yrds` (Total Rushing Yards)
+* `Yds` (Total Rushing Yards)
 * `Avg` (Rushing Average Yards Per Attempt)
 * `Yds/G` (Rushing Yards Per Game)
 * `TD` (Total Rushing Touchdowns)
