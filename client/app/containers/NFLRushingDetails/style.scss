@@ -1,0 +1,67 @@
+.details-page {
+  
+  h2 {
+    font-size: 1.5em;
+  }
+  
+  section {
+    margin: 3em auto;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &.centered {
+      text-align: center;
+    }
+  }
+
+  form {
+    margin-bottom: 1em;
+
+    input {
+      outline: none;
+      border-bottom: 1px dotted #999;
+    }
+  }
+
+  span.at-prefix {
+    color: black;
+    margin-left: 0.4em;
+  }
+
+  .header-col {
+    background-color: #999;
+    font-weight: bold;
+  }
+
+  .col {
+    background-color: #eee;
+  }
+ 
+  .header-col,
+  .col,
+  .error-msg {
+    display: inline-block;
+    padding: 5px;
+    margin: 1px;
+  }
+
+  .col200 {
+    width: 200px;
+  }
+
+  .col70 {
+    width: 70px;
+  }
+
+  .col50 {
+    width: 50px;
+  }
+ 
+  .error-msg {
+    background-color: #ff5550;
+    font-weight: bold;
+  }
+
+}
