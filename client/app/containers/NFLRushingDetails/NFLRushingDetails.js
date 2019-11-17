@@ -11,7 +11,7 @@ import './style.scss';
 
 import LoadingIndicator from 'components/LoadingIndicator';
 
-export default class NFLRushingDetails extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export default class NFLRushingDetails extends React.PureComponent {
   componentDidMount() {
     const {
       loadPlayersRushingData,
@@ -126,7 +126,13 @@ export default class NFLRushingDetails extends React.PureComponent { // eslint-d
       <div key={`pr_${playerRushing.pid}`}>
         <div className="col col50">{index + 1}</div>
         {tableConfiguration.map(({ label, key, columnStyleClass }) => (
-          <div key={label} className={columnStyleClass}>{playerRushing[key]}</div>
+          <div
+            key={label}
+            className={`${columnStyleClass} ${playerRushing.longest_rush_touchdown
+              && key === 'longest_rush' ? 'touchdown' : ''}`}
+          >
+            {playerRushing[key]}
+          </div>
         ))}
       </div>
     )) : [];
@@ -157,6 +163,12 @@ export default class NFLRushingDetails extends React.PureComponent { // eslint-d
                   onChange={onChangePlayerName}
                 />
               </label>
+              <a
+                className="csv-link"
+                href="http://localhost:8000/players_rushing/csv"
+              >
+                Download CSV
+              </a>
             </form>
             {playersRushingHeader}
             {loadingEl}
@@ -184,6 +196,7 @@ NFLRushingDetails.propTypes = {
     rushing_yards_per_game: PropTypes.number,
     total_rushing_touchdowns: PropTypes.number,
     longest_rush: PropTypes.string,
+    longest_rush_touchdown: PropTypes.bool,
     rushing_first_downs: PropTypes.number,
     rushing_first_down_percentage: PropTypes.number,
     rushing_20_plus_yards_each: PropTypes.number,
