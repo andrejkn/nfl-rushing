@@ -17,11 +17,13 @@
   }
 
   form {
-    margin-bottom: 1em;
+    margin: 10px 0;
 
     input {
       outline: none;
-      border-bottom: 1px dotted #999;
+      margin-left: 10px;
+      height: 20px;
+      font-size: 15px;
     }
   }
 
@@ -47,6 +49,10 @@
     margin: 1px;
   }
 
+  .touchdown {
+    background-color: #00ee99;
+  }
+
   .col200 {
     width: 200px;
   }
@@ -62,6 +68,13 @@
   .error-msg {
     background-color: #ff5550;
     font-weight: bold;
+  }
+
+  .csv-link {
+    float: right;
+    margin-right: 20px;
+    margin-top: 10px;
+    color: #445599;
   }
 
 }
