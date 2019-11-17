@@ -18,9 +18,15 @@ const makeSelectPlayersRushing = () => createSelector(
   (globalState) => globalState.playersRushing
 );
 
+const makeSelectSortBy = () => createSelector(
+  selectState,
+  (globalState) => globalState.sortBy
+);
+
 export {
   selectState,
   makeSelectLoading,
   makeSelectError,
   makeSelectPlayersRushing,
+  makeSelectSortBy,
 };

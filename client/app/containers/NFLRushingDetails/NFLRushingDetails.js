@@ -27,6 +27,8 @@ export default class NFLRushingDetails extends React.PureComponent {
       playerName,
       onChangePlayerName,
       playersRushing,
+      sortByColumn,
+      sortBy,
     } = this.props;
 
     const col70 = {
@@ -109,8 +111,15 @@ export default class NFLRushingDetails extends React.PureComponent {
     const headerEls = tableConfiguration.map(({ label, headerStyleClass, key }) => (
       <div
         key={label}
-        className={headerStyleClass}
+        className={`${headerStyleClass}
+          ${sortBy[key] ? 'sorted-col' : ''}
+          ${sortBy[key] !== undefined ? 'sortable-col' : ''}
+        `}
         title={key}
+        onClick={sortBy[key] !== undefined ? () => sortByColumn(key) : null}
+        onKeyPress={sortBy[key] !== undefined ? () => sortByColumn(key) : null}
+        role="button"
+        tabIndex="0"
       >
         {label}
       </div>
@@ -184,7 +193,7 @@ export default class NFLRushingDetails extends React.PureComponent {
 NFLRushingDetails.propTypes = {
   loading: PropTypes.bool,
   error: PropTypes.bool,
-  playersRushing: PropTypes.arrayOf({
+  playersRushing: PropTypes.arrayOf(PropTypes.shape({
     pid: PropTypes.number,
     name: PropTypes.string,
     team: PropTypes.string,
@@ -195,15 +204,21 @@ NFLRushingDetails.propTypes = {
     rushing_average_yards_per_attempt: PropTypes.number,
     rushing_yards_per_game: PropTypes.number,
     total_rushing_touchdowns: PropTypes.number,
-    longest_rush: PropTypes.string,
+    longest_rush: PropTypes.number,
     longest_rush_touchdown: PropTypes.bool,
     rushing_first_downs: PropTypes.number,
     rushing_first_down_percentage: PropTypes.number,
     rushing_20_plus_yards_each: PropTypes.number,
     rushing_40_plus_yards_each: PropTypes.number,
     rushing_fumbles: PropTypes.number,
-  }),
+  })),
   loadPlayersRushingData: PropTypes.func,
   playerName: PropTypes.string,
   onChangePlayerName: PropTypes.func,
+  sortByColumn: PropTypes.func,
+  sortBy: PropTypes.shape({
+    total_rushing_yards: PropTypes.bool,
+    longest_rush: PropTypes.bool,
+    total_rushing_touchdowns: PropTypes.bool,
+  }),
 };

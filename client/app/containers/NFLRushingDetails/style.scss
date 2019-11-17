@@ -77,4 +77,16 @@
     color: #445599;
   }
 
+  .sorted-col {
+    background-color: #445599;
+  }
+  
+  .sortable-col::after {
+    content: "^";
+    color: #99ee99;
+    margin-left: 4px;
+    font-size: 10px;
+    vertical-align: bottom;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
 }

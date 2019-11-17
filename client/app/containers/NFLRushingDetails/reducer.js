@@ -2,6 +2,7 @@ import {
   LOAD_PLAYERS_RUSHING_SUCCESS,
   LOAD_PLAYERS_RUSHING,
   LOAD_PLAYERS_RUSHING_ERROR,
+  SORT_BY,
 } from './constants';
 
 // The initial state of the App
@@ -9,6 +10,12 @@ export const initialState = {
   loading: false,
   error: false,
   playersRushing: null,
+  sortBy: {
+    // Total Rushing Yards, Longest Rush and Total Rushing Touchdowns
+    total_rushing_yards: false,
+    longest_rush: false,
+    total_rushing_touchdowns: false,
+  },
 };
 
 function appReducer(state = initialState, action) {
@@ -39,6 +46,17 @@ function appReducer(state = initialState, action) {
         loading: false,
       };
     }
+
+    case SORT_BY: {
+      return {
+        ...state,
+        sortBy: {
+          ...state.sortBy,
+          [action.payload]: !state.sortBy[action.payload],
+        },
+      };
+    }
+
     default:
       return state;
   }
