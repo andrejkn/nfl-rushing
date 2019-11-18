@@ -40,7 +40,7 @@ git clone git@github.com:andrejkn/nfl-rushing.git
 
 * Change directory to the location of the cloned repository:
 ```bash
-cd ~/nfl-rush
+cd ~/nfl-rushing
 ```
 
 * Run the app in a docker container:
