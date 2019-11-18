@@ -28,10 +28,10 @@ This app is able to do the following things:
 
 ### Installation and running this solution
 To run this app in your local environment using Docker.
-If you don't have Docker installed already please visit their [installation page](https://docs.docker.com/install/) for more details.
+If you don't have Docker installed already please visit [installation page](https://docs.docker.com/install/) for more details.
 
 Once you have Docker installed and cloned this repo locally,
-you can run this app in a container by following these steps:
+you can run `server` and `client` apps in a container by following these steps:
 
 * Clone this repository:
 ```bash
@@ -47,6 +47,16 @@ cd ~/nfl-rush
 ```bash
 docker-compose up -d
 ```
+This last step will start 3 containers, one for the PostgreSQL database,
+one for the Python/FastAPI server app and one for the React/Redux client
+app.
+The `rushing.json` will be automatically loaded in the DB.
 
-* Open the app in your browser:
-[http://localhost:8000](http://localhost:8000)
+* Open the client app in your browser:
+[http://localhost:3000](http://localhost:3000)
+
+The server, which comes with [swagger](https://swagger.io/), app can be accessed through:
+[http://localhost:8000/docs](http://localhost:8000/docs)
+
+For any questions regarding this repo and the setup process you can reach out
+to me via email [knezevskia@gmail.com](mailto:knezevskia@gmail.com)
