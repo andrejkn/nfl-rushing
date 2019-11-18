@@ -9,6 +9,7 @@ import request from 'utils/request';
 import {
   LOAD_PLAYERS_RUSHING,
   SORT_BY,
+  FILTER_BY_PLAYER_NAME,
 } from './constants';
 
 import {
@@ -18,23 +19,17 @@ import {
 
 import {
   makeSelectSortBy,
+  makeSelectPlayerName,
 } from './selectors';
+
+import { formatQueryParams } from './utils';
 
 export function* getPlayersRushing() {
   const sortByState = yield select(makeSelectSortBy());
-  const sortByParametersMap = {
-    total_rushing_yards: 'TotalRushingYards',
-    longest_rush: 'LongestRush',
-    total_rushing_touchdowns: 'TotalRushingTouchdowns',
-  };
+  const playerName = yield select(makeSelectPlayerName());
 
-  const sortByParameters = [
-    'total_rushing_yards',
-    'longest_rush',
-    'total_rushing_touchdowns',
-  ].reduce((acc, param) => (sortByState[param] ? `${acc}&order_by=${sortByParametersMap[param]}` : acc), '');
-
-  const requestURL = `http://localhost:8000/players_rushing?${sortByParameters}`;
+  const parametersString = formatQueryParams(sortByState, playerName);
+  const requestURL = `http://localhost:8000/players_rushing${parametersString}`;
 
   try {
     // Call our request helper (see 'utils/request')
@@ -51,4 +46,5 @@ export function* getPlayersRushing() {
 export default function* playersRushingData() {
   yield takeLatest(LOAD_PLAYERS_RUSHING, getPlayersRushing);
   yield takeLatest(SORT_BY, getPlayersRushing);
+  yield takeLatest(FILTER_BY_PLAYER_NAME, getPlayersRushing);
 }

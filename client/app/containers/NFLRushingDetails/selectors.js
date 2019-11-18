@@ -5,28 +5,33 @@ const selectState = (state) => state.nflRushingDetails;
 
 const makeSelectLoading = () => createSelector(
   selectState,
-  (globalState) => globalState.loading
+  (state) => state.loading
 );
 
 const makeSelectError = () => createSelector(
   selectState,
-  (globalState) => globalState.error
+  (state) => state.error
 );
 
 const makeSelectPlayersRushing = () => createSelector(
   selectState,
-  (globalState) => globalState.playersRushing
+  (state) => state.playersRushing
 );
 
 const makeSelectSortBy = () => createSelector(
   selectState,
-  (globalState) => globalState.sortBy
+  (state) => state.sortBy
 );
 
+const makeSelectPlayerName = () => createSelector(
+  selectState,
+  (state) => state.playerName
+);
 export {
   selectState,
   makeSelectLoading,
   makeSelectError,
   makeSelectPlayersRushing,
   makeSelectSortBy,
+  makeSelectPlayerName,
 };

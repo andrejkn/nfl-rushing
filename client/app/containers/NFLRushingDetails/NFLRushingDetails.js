@@ -10,6 +10,7 @@ import { Helmet } from 'react-helmet';
 import './style.scss';
 
 import LoadingIndicator from 'components/LoadingIndicator';
+import { formatQueryParams } from './utils';
 
 export default class NFLRushingDetails extends React.PureComponent {
   componentDidMount() {
@@ -24,12 +25,27 @@ export default class NFLRushingDetails extends React.PureComponent {
     const {
       loading,
       error,
-      playerName,
-      onChangePlayerName,
       playersRushing,
       sortByColumn,
       sortBy,
+      filterByPlayerNameColumn,
+      playerName,
     } = this.props;
+
+    const delayCall = (callback, time) => {
+      let timeoutId;
+      return (param) => {
+        param.persist();
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(() => callback(param), time);
+      };
+    };
+
+    const onChangePlayerName = delayCall((evt) => {
+      filterByPlayerNameColumn(evt.target.value);
+    }, 1000);
 
     const col70 = {
       headerStyleClass: 'header-col col70',
@@ -161,24 +177,23 @@ export default class NFLRushingDetails extends React.PureComponent {
         </Helmet>
         <div className="details-page">
           <section>
-            <form onSubmit={() => null}>
-              <label htmlFor="name">
-                Filter By Player:
-                <input
-                  id="name"
-                  type="text"
-                  placeholder="Enter Player Name"
-                  value={playerName}
-                  onChange={onChangePlayerName}
-                />
-              </label>
-              <a
-                className="csv-link"
-                href="http://localhost:8000/players_rushing/csv"
-              >
-                Download CSV
-              </a>
-            </form>
+            <label htmlFor="name">
+              Filter By Player:
+              <input
+                id="name"
+                type="text"
+                placeholder="Enter Player Name"
+                onChange={onChangePlayerName}
+              />
+            </label>
+            <a
+              className="csv-link"
+              href={`http://localhost:8000/players_rushing/nfl_rushing_csv${formatQueryParams(sortBy, playerName)}`}
+            >
+              Download CSV
+            </a>
+          </section>
+          <section>
             {playersRushingHeader}
             {loadingEl}
             {errorEl}
@@ -213,12 +228,12 @@ NFLRushingDetails.propTypes = {
     rushing_fumbles: PropTypes.number,
   })),
   loadPlayersRushingData: PropTypes.func,
-  playerName: PropTypes.string,
-  onChangePlayerName: PropTypes.func,
   sortByColumn: PropTypes.func,
   sortBy: PropTypes.shape({
     total_rushing_yards: PropTypes.bool,
     longest_rush: PropTypes.bool,
     total_rushing_touchdowns: PropTypes.bool,
   }),
+  filterByPlayerNameColumn: PropTypes.func,
+  playerName: PropTypes.string,
 };
