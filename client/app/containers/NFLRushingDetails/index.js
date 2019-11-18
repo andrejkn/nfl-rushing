@@ -10,6 +10,7 @@ import {
   makeSelectLoading,
   makeSelectError,
   makeSelectSortBy,
+  makeSelectPlayerName,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -17,6 +18,7 @@ import saga from './saga';
 import {
   loadPlayersRushing,
   sortBy,
+  filterByPlayerName,
 } from './actions';
 
 import NFLRushingDetails from './NFLRushingDetails';
@@ -24,6 +26,7 @@ import NFLRushingDetails from './NFLRushingDetails';
 const mapDispatchToProps = (dispatch) => ({
   loadPlayersRushingData: () => dispatch(loadPlayersRushing()),
   sortByColumn: (columnName) => dispatch(sortBy(columnName)),
+  filterByPlayerNameColumn: (name) => dispatch(filterByPlayerName(name)),
 });
 
 const mapStateToProps = createStructuredSelector({
@@ -31,6 +34,7 @@ const mapStateToProps = createStructuredSelector({
   loading: makeSelectLoading(),
   error: makeSelectError(),
   sortBy: makeSelectSortBy(),
+  playerName: makeSelectPlayerName(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

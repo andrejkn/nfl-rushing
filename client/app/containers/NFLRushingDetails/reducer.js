@@ -3,6 +3,7 @@ import {
   LOAD_PLAYERS_RUSHING,
   LOAD_PLAYERS_RUSHING_ERROR,
   SORT_BY,
+  FILTER_BY_PLAYER_NAME,
 } from './constants';
 
 // The initial state of the App
@@ -16,6 +17,7 @@ export const initialState = {
     longest_rush: false,
     total_rushing_touchdowns: false,
   },
+  playerName: null,
 };
 
 function appReducer(state = initialState, action) {
@@ -57,6 +59,12 @@ function appReducer(state = initialState, action) {
       };
     }
 
+    case FILTER_BY_PLAYER_NAME: {
+      return {
+        ...state,
+        playerName: action.payload,
+      };
+    }
     default:
       return state;
   }

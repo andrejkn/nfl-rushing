@@ -3,6 +3,7 @@ import {
   LOAD_PLAYERS_RUSHING,
   LOAD_PLAYERS_RUSHING_ERROR,
   SORT_BY,
+  FILTER_BY_PLAYER_NAME,
 } from './constants';
 
 export function loadPlayersRushing() {
@@ -28,6 +29,13 @@ export function playersRushingLoadingError(error) {
 export function sortBy(payload) {
   return {
     type: SORT_BY,
+    payload,
+  };
+}
+
+export function filterByPlayerName(payload) {
+  return {
+    type: FILTER_BY_PLAYER_NAME,
     payload,
   };
 }
