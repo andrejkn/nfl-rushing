@@ -5,25 +5,19 @@
   }
   
   section {
-    margin: 3em auto;
-
-    &:first-child {
-      margin-top: 0;
-    }
-
     &.centered {
       text-align: center;
     }
   }
 
-  form {
+  .filter-bar {
     margin: 10px 0;
 
     input {
       outline: none;
       margin-left: 10px;
-      height: 20px;
-      font-size: 15px;
+      height: 25px;
+      font-size: 20px;
     }
   }
 
@@ -53,6 +47,11 @@
     background-color: #00ee99;
   }
 
+  .td-box {
+    text-align: center;
+    margin-left: 410px;
+  }
+
   .col200 {
     width: 200px;
   }
@@ -73,7 +72,6 @@
   .csv-link {
     float: right;
     margin-right: 20px;
-    margin-top: 10px;
     color: #445599;
   }
 
