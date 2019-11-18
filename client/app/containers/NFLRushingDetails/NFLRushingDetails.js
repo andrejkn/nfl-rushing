@@ -11,6 +11,7 @@ import './style.scss';
 
 import LoadingIndicator from 'components/LoadingIndicator';
 import { formatQueryParams } from './utils';
+import tableConfiguration from './config';
 
 export default class NFLRushingDetails extends React.PureComponent {
   componentDidMount() {
@@ -46,83 +47,6 @@ export default class NFLRushingDetails extends React.PureComponent {
     const onChangePlayerName = delayCall((evt) => {
       filterByPlayerNameColumn(evt.target.value);
     }, 1000);
-
-    const col70 = {
-      headerStyleClass: 'header-col col70',
-      columnStyleClass: 'col col70',
-    };
-
-    const col50 = {
-      headerStyleClass: 'header-col col50',
-      columnStyleClass: 'col col50',
-    };
-
-    const col200 = {
-      headerStyleClass: 'header-col col200',
-      columnStyleClass: 'col col200',
-    };
-
-    const tableConfiguration = [{
-      label: 'Player',
-      key: 'name',
-      ...col200,
-    }, {
-      label: 'Team',
-      key: 'team',
-      ...col70,
-    }, {
-      label: 'Pos',
-      key: 'position',
-      ...col50,
-    }, {
-      label: 'Att/G',
-      key: 'rushing_attempts_per_game_average',
-      ...col70,
-    }, {
-      label: 'Att',
-      key: 'rushing_attempts',
-      ...col50,
-    }, {
-      label: 'Yds',
-      key: 'total_rushing_yards',
-      ...col50,
-    }, {
-      label: 'Avg',
-      key: 'rushing_average_yards_per_attempt',
-      ...col50,
-    }, {
-      label: 'Yds/G',
-      key: 'rushing_yards_per_game',
-      ...col70,
-    }, {
-      label: 'TD',
-      key: 'total_rushing_touchdowns',
-      ...col50,
-    }, {
-      label: 'Lng',
-      key: 'longest_rush',
-      ...col50,
-    }, {
-      label: '1st',
-      key: 'rushing_first_downs',
-      ...col50,
-    }, {
-      label: '1st%',
-      key: 'rushing_first_down_percentage',
-      ...col50,
-    }, {
-      label: '20+',
-      key: 'rushing_20_plus_yards_each',
-      ...col50,
-    }, {
-      label: '40+',
-      key: 'rushing_40_plus_yards_each',
-      ...col50,
-    }, {
-      label: 'FUM',
-      key: 'rushing_fumbles',
-      ...col50,
-    }];
 
     const headerEls = tableConfiguration.map(({ label, headerStyleClass, key }) => (
       <div
@@ -169,6 +93,7 @@ export default class NFLRushingDetails extends React.PureComponent {
       </div>
     ) : null;
 
+    const downloadCsvURL = `http://localhost:8000/players_rushing/nfl_rushing_csv${formatQueryParams(sortBy, playerName)}`;
     return (
       <article>
         <Helmet>
@@ -176,7 +101,7 @@ export default class NFLRushingDetails extends React.PureComponent {
           <meta name="description" content="NFL Rushing Details" />
         </Helmet>
         <div className="details-page">
-          <section>
+          <section className="filter-bar">
             <label htmlFor="name">
               Filter By Player:
               <input
@@ -186,9 +111,10 @@ export default class NFLRushingDetails extends React.PureComponent {
                 onChange={onChangePlayerName}
               />
             </label>
+            <div className="col col50 touchdown td-box">TD</div>
             <a
               className="csv-link"
-              href={`http://localhost:8000/players_rushing/nfl_rushing_csv${formatQueryParams(sortBy, playerName)}`}
+              href={downloadCsvURL}
             >
               Download CSV
             </a>
