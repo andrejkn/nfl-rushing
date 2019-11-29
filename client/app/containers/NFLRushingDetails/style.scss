@@ -113,4 +113,28 @@
   .unsorted::after {
     vertical-align: middle;
   }
+
+  .pagination-bar {
+    text-align: center;
+  }
+
+
+  .page-counter,
+  .previous-page,
+  .next-page {
+    display: inline-block;
+    margin: 0 5px;
+  }
+
+  .previous-page,
+  .next-page {
+    cursor: pointer;
+  }
+
+  .next-page::after {
+    content: "⮀";
+  }
+  .previous-page::after {
+    content: "⮂";
+  }
 }

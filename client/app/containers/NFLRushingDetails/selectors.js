@@ -18,6 +18,11 @@ const makeSelectPlayersRushing = () => createSelector(
   (state) => state.playersRushing
 );
 
+const makeSelectTotalPlayers = () => createSelector(
+  selectState,
+  (state) => state.totalPlayers
+);
+
 const makeSelectSortBy = () => createSelector(
   selectState,
   (state) => state.sortBy
@@ -27,11 +32,19 @@ const makeSelectPlayerName = () => createSelector(
   selectState,
   (state) => state.playerName
 );
+
+const makeSelectPageNumber = () => createSelector(
+  selectState,
+  (state) => state.pageNumber
+);
+
 export {
   selectState,
   makeSelectLoading,
   makeSelectError,
   makeSelectPlayersRushing,
+  makeSelectTotalPlayers,
   makeSelectSortBy,
   makeSelectPlayerName,
+  makeSelectPageNumber,
 };
