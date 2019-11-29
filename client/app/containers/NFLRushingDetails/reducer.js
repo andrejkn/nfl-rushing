@@ -6,17 +6,23 @@ import {
   FILTER_BY_PLAYER_NAME,
 } from './constants';
 
+const toggleSort = (current) => {
+  const sortStates = [null, 'Descending', 'Ascending'];
+  return sortStates[(sortStates.indexOf(current) + 1) % sortStates.length];
+}
+
+const initialSortState = {
+  total_rushing_yards: null,
+  longest_rush: null,
+  total_rushing_touchdowns: null,
+};
+
 // The initial state of the App
 export const initialState = {
   loading: false,
   error: false,
   playersRushing: null,
-  sortBy: {
-    // Total Rushing Yards, Longest Rush and Total Rushing Touchdowns
-    total_rushing_yards: false,
-    longest_rush: false,
-    total_rushing_touchdowns: false,
-  },
+  sortBy: initialSortState,
   playerName: null,
 };
 
@@ -53,8 +59,8 @@ function appReducer(state = initialState, action) {
       return {
         ...state,
         sortBy: {
-          ...state.sortBy,
-          [action.payload]: !state.sortBy[action.payload],
+          ...initialSortState,
+          [action.payload]: toggleSort(state.sortBy[action.payload]),
         },
       };
     }
