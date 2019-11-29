@@ -4,6 +4,7 @@ import {
   LOAD_PLAYERS_RUSHING_ERROR,
   SORT_BY,
   FILTER_BY_PLAYER_NAME,
+  CHANGE_PAGE,
 } from './constants';
 
 const toggleSort = (current) => {
@@ -24,6 +25,8 @@ export const initialState = {
   playersRushing: null,
   sortBy: initialSortState,
   playerName: null,
+  pageNumber: 0,
+  totalPlayers: null,
 };
 
 function appReducer(state = initialState, action) {
@@ -42,7 +45,8 @@ function appReducer(state = initialState, action) {
       const newState = {
         ...state,
         loading: false,
-        playersRushing: action.payload,
+        playersRushing: action.payload.items,
+        totalPlayers: action.payload.total_items,
       };
       return newState;
     }
@@ -71,6 +75,14 @@ function appReducer(state = initialState, action) {
         playerName: action.payload,
       };
     }
+
+    case CHANGE_PAGE: {
+      return {
+        ...state,
+        pageNumber: action.payload,
+      };
+    }
+
     default:
       return state;
   }

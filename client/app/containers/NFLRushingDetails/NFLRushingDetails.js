@@ -12,6 +12,7 @@ import './style.scss';
 import LoadingIndicator from 'components/LoadingIndicator';
 import { formatQueryParams } from './utils';
 import tableConfiguration from './config';
+import { ITEMS_PER_PAGE } from './constants';
 
 export default class NFLRushingDetails extends React.PureComponent {
   componentDidMount() {
@@ -27,10 +28,13 @@ export default class NFLRushingDetails extends React.PureComponent {
       loading,
       error,
       playersRushing,
+      totalPlayers,
       sortByColumn,
       sortBy,
       filterByPlayerNameColumn,
       playerName,
+      pageNumber,
+      changePageNumber,
     } = this.props;
 
     const delayCall = (callback, time) => {
@@ -80,7 +84,7 @@ export default class NFLRushingDetails extends React.PureComponent {
 
     const playersRushingRows = playersRushing ? playersRushing.map((playerRushing, index) => (
       <div key={`pr_${playerRushing.pid}`}>
-        <div className="col col50">{index + 1}</div>
+        <div className="col col50">{(index + 1) + (pageNumber * ITEMS_PER_PAGE)}</div>
         {tableConfiguration.map(({ label, key, columnStyleClass }) => (
           <div
             key={label}
@@ -100,7 +104,32 @@ export default class NFLRushingDetails extends React.PureComponent {
       </div>
     ) : null;
 
-    const downloadCsvURL = `http://localhost:8000/players_rushing/nfl_rushing_csv${formatQueryParams(sortBy, playerName)}`;
+    const queryParameters = formatQueryParams(sortBy, playerName, pageNumber);
+    const downloadCsvURL = `http://localhost:8000/players_rushing/nfl_rushing_csv${queryParameters}`;
+
+    const totalPages = Math.floor(totalPlayers / ITEMS_PER_PAGE);
+    const handlePageChange = (increment) => changePageNumber(pageNumber + increment);
+    const changePageButton = (className, increment) => (
+      (pageNumber + increment) >= 0 && (pageNumber + increment) <= totalPages ? (
+        <div
+          role="button"
+          className={className}
+          onClick={() => handlePageChange(increment)}
+          onKeyPress={() => handlePageChange(increment)}
+          tabIndex="-1"
+        />
+      ) : null);
+
+    const paginationBar = (
+      <div className="pagination-bar">
+        {changePageButton('previous-page', -1)}
+        <div className="page-counter">
+          {pageNumber + 1}/{totalPages + 1}
+        </div>
+        {changePageButton('next-page', 1)}
+      </div>
+    );
+
     return (
       <article>
         <Helmet>
@@ -131,6 +160,7 @@ export default class NFLRushingDetails extends React.PureComponent {
             {loadingEl}
             {errorEl}
             {playersRushingRows}
+            {paginationBar}
           </section>
         </div>
       </article>
@@ -160,6 +190,7 @@ NFLRushingDetails.propTypes = {
     rushing_40_plus_yards_each: PropTypes.number,
     rushing_fumbles: PropTypes.number,
   })),
+  totalPlayers: PropTypes.number,
   loadPlayersRushingData: PropTypes.func,
   sortByColumn: PropTypes.func,
   sortBy: PropTypes.shape({
@@ -169,4 +200,6 @@ NFLRushingDetails.propTypes = {
   }),
   filterByPlayerNameColumn: PropTypes.func,
   playerName: PropTypes.string,
+  pageNumber: PropTypes.number,
+  changePageNumber: PropTypes.func,
 };
