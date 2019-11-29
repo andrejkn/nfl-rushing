@@ -48,12 +48,19 @@ export default class NFLRushingDetails extends React.PureComponent {
       filterByPlayerNameColumn(evt.target.value);
     }, 1000);
 
+    const sortClassNames = {
+      Ascending: 'ascending',
+      Descending: 'descending',
+      Unsorted: 'unsorted',
+    };
+
     const headerEls = tableConfiguration.map(({ label, headerStyleClass, key }) => (
       <div
         key={label}
         className={`${headerStyleClass}
           ${sortBy[key] ? 'sorted-col' : ''}
           ${sortBy[key] !== undefined ? 'sortable-col' : ''}
+          ${sortBy[key] !== null ? sortClassNames[sortBy[key]] : sortClassNames.Unsorted}
         `}
         title={key}
         onClick={sortBy[key] !== undefined ? () => sortByColumn(key) : null}
@@ -111,7 +118,7 @@ export default class NFLRushingDetails extends React.PureComponent {
                 onChange={onChangePlayerName}
               />
             </label>
-            <div className="col col50 touchdown td-box">TD</div>
+            <div className="col col60 touchdown td-box">TD</div>
             <a
               className="csv-link"
               href={downloadCsvURL}
@@ -156,7 +163,7 @@ NFLRushingDetails.propTypes = {
   loadPlayersRushingData: PropTypes.func,
   sortByColumn: PropTypes.func,
   sortBy: PropTypes.shape({
-    total_rushing_yards: PropTypes.bool,
+    total_rushing_yards: PropTypes.oneOf([null, 'Ascending', 'Descending']),
     longest_rush: PropTypes.bool,
     total_rushing_touchdowns: PropTypes.bool,
   }),

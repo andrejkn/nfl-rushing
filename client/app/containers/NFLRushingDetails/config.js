@@ -1,3 +1,8 @@
+const col60 = {
+  headerStyleClass: 'header-col col60',
+  columnStyleClass: 'col col60',
+};
+
 const col70 = {
   headerStyleClass: 'header-col col70',
   columnStyleClass: 'col col70',
@@ -36,7 +41,7 @@ export default [{
 }, {
   label: 'Yds',
   key: 'total_rushing_yards',
-  ...col50,
+  ...col60,
 }, {
   label: 'Avg',
   key: 'rushing_average_yards_per_attempt',
@@ -52,7 +57,7 @@ export default [{
 }, {
   label: 'Lng',
   key: 'longest_rush',
-  ...col50,
+  ...col60,
 }, {
   label: '1st',
   key: 'rushing_first_downs',

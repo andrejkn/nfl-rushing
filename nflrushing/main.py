@@ -3,6 +3,7 @@ from fastapi import Query
 from pydantic import BaseModel
 from starlette.responses import Response
 from typing import List
+from sqlalchemy import desc
 
 from nflrushing import create_app
 from nflrushing.models.player_rushing import PlayerRushing as PlayerRushingDBModel
@@ -43,19 +44,18 @@ class PlayerRushingResponse(BaseModel):
     items: List[PlayerRushing]
 
 
-class OrderBy(str, Enum):
-    total_rushing_yards = 'TotalRushingYards'
-    longest_rush = 'LongestRush'
-    total_rushing_touchdowns = 'TotalRushingTouchdowns'
+class OrderByDirection(str, Enum):
+    ascending = 'Ascending'
+    descending = 'Descending'
 
 
 def prepare_response(page_number: int,
                      items_per_page: int,
-                     order_by: List[OrderBy],
                      total_items: int,
-                     player_name: str) -> PlayerRushingResponse:
-    if order_by is None:
-        order_by = []
+                     player_name: str,
+                     order_by_total_rushing_yards: OrderByDirection,
+                     order_by_longest_rush: OrderByDirection,
+                     order_by_total_rushing_touchdowns: OrderByDirection) -> PlayerRushingResponse:
 
     query = db.session.query(PlayerRushingDBModel)
 
@@ -64,12 +64,23 @@ def prepare_response(page_number: int,
     end = start + items_per_page
 
     # handle sorting
-    if OrderBy.longest_rush in order_by:
-        query = query.order_by(PlayerRushingDBModel.longest_rush)
-    if OrderBy.total_rushing_touchdowns in order_by:
-        query = query.order_by(PlayerRushingDBModel.total_rushing_touchdowns)
-    if OrderBy.total_rushing_yards in order_by:
-        query = query.order_by(PlayerRushingDBModel.total_rushing_yards)
+    if order_by_longest_rush is not None:
+        query = query.order_by(
+            desc(PlayerRushingDBModel.longest_rush) if
+            order_by_longest_rush == OrderByDirection.descending else
+            PlayerRushingDBModel.longest_rush)
+
+    if order_by_total_rushing_touchdowns is not None:
+        query = query.order_by(
+            desc(PlayerRushingDBModel.total_rushing_touchdowns) if
+            order_by_total_rushing_touchdowns == OrderByDirection.descending else
+            PlayerRushingDBModel.total_rushing_touchdowns)
+
+    if order_by_total_rushing_yards is not None:
+        query = query.order_by(
+            desc(PlayerRushingDBModel.total_rushing_yards) if
+            order_by_total_rushing_yards == OrderByDirection.descending else
+            PlayerRushingDBModel.total_rushing_yards)
 
     # handle filter by player_name
     if player_name:
@@ -86,27 +97,45 @@ def prepare_response(page_number: int,
 @app.get('/players_rushing', response_model=PlayerRushingResponse)
 def players_rushing(page_number: int = None,
                     items_per_page: int = None,
-                    order_by: List[OrderBy] = Query([]),
-                    player_name: str = None) -> PlayerRushingResponse:
+                    player_name: str = None,
+                    order_by_total_rushing_yards: OrderByDirection = None,
+                    order_by_longest_rush: OrderByDirection = None,
+                    order_by_total_rushing_touchdowns: OrderByDirection = None) -> PlayerRushingResponse:
     query = db.session.query(PlayerRushingDBModel)
     total_items = query.count()
 
     # if only page_number is specified
     # then return only 10 results by default
     if page_number is not None and items_per_page is None:
-        return prepare_response(page_number, 10, order_by, total_items, player_name)
+        return prepare_response(page_number, 10,
+                                total_items, player_name,
+                                order_by_total_rushing_yards,
+                                order_by_longest_rush,
+                                order_by_total_rushing_touchdowns)
 
     # if only items_per_page is specified
     # then default the page_number to 0
     elif page_number is None and items_per_page is not None:
-        return prepare_response(0, items_per_page, order_by, total_items, player_name)
+        return prepare_response(0, items_per_page,
+                                total_items, player_name,
+                                order_by_total_rushing_yards,
+                                order_by_longest_rush,
+                                order_by_total_rushing_touchdowns)
 
     # if both page_number and items_per_page are not specified
     # then return all possible results (no pagination)
     elif page_number is None and items_per_page is None:
-        return prepare_response(0, total_items, order_by, total_items, player_name)
+        return prepare_response(0, total_items,
+                                total_items, player_name,
+                                order_by_total_rushing_yards,
+                                order_by_longest_rush,
+                                order_by_total_rushing_touchdowns)
     else:
-        return prepare_response(page_number, items_per_page, order_by, total_items, player_name)
+        return prepare_response(page_number, items_per_page,
+                                total_items, player_name,
+                                order_by_total_rushing_yards,
+                                order_by_longest_rush,
+                                order_by_total_rushing_touchdowns)
 
 
 @app.get('/players_rushing/nfl_rushing_csv', responses={
@@ -115,10 +144,18 @@ def players_rushing(page_number: int = None,
         'description': 'Returns a CSV of players rushing.',
     }
 })
-def players_rushing_csv(order_by: List[OrderBy] = Query([]), player_name: str = None) -> Response:
+def players_rushing_csv(player_name: str = None,
+                        order_by_total_rushing_yards: OrderByDirection = None,
+                        order_by_longest_rush: OrderByDirection = None,
+                        order_by_total_rushing_touchdowns: OrderByDirection = None
+                        ) -> Response:
     query = db.session.query(PlayerRushingDBModel)
     total_items = query.count()
-    response = prepare_response(0, total_items, order_by, total_items, player_name)
+    response = prepare_response(0, total_items,
+                                total_items, player_name,
+                                order_by_total_rushing_yards,
+                                order_by_longest_rush,
+                                order_by_total_rushing_touchdowns)
 
     header_mapping = {
         'name': 'Player',
