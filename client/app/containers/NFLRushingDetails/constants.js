@@ -3,3 +3,5 @@ export const LOAD_PLAYERS_RUSHING_SUCCESS = 'NFLRushingApp/NFLRushingDetails/LOA
 export const LOAD_PLAYERS_RUSHING_ERROR = 'NFLRushingApp/NFLRushingDetails/LOAD_PLAYERS_RUSHING_ERROR';
 export const SORT_BY = 'NFLRushingApp/NFLRushingDetails/SORT_BY';
 export const FILTER_BY_PLAYER_NAME = 'NFLRushingApp/NFLRushingDetails/FILTER_BY_PLAYER_NAME';
+export const CHANGE_PAGE = 'NFLRushingApp/NFLRushingDetails/CHANGE_PAGE';
+export const ITEMS_PER_PAGE = 10;

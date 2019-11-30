@@ -4,6 +4,7 @@ import {
   LOAD_PLAYERS_RUSHING_ERROR,
   SORT_BY,
   FILTER_BY_PLAYER_NAME,
+  CHANGE_PAGE,
 } from './constants';
 
 export function loadPlayersRushing() {
@@ -36,6 +37,13 @@ export function sortBy(payload) {
 export function filterByPlayerName(payload) {
   return {
     type: FILTER_BY_PLAYER_NAME,
+    payload,
+  };
+}
+
+export function changePageNumber(payload) {
+  return {
+    type: CHANGE_PAGE,
     payload,
   };
 }

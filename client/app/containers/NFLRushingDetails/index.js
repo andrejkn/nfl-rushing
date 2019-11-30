@@ -7,10 +7,12 @@ import injectSaga from 'utils/injectSaga';
 
 import {
   makeSelectPlayersRushing,
+  makeSelectTotalPlayers,
   makeSelectLoading,
   makeSelectError,
   makeSelectSortBy,
   makeSelectPlayerName,
+  makeSelectPageNumber,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -19,6 +21,7 @@ import {
   loadPlayersRushing,
   sortBy,
   filterByPlayerName,
+  changePageNumber,
 } from './actions';
 
 import NFLRushingDetails from './NFLRushingDetails';
@@ -27,14 +30,17 @@ const mapDispatchToProps = (dispatch) => ({
   loadPlayersRushingData: () => dispatch(loadPlayersRushing()),
   sortByColumn: (columnName) => dispatch(sortBy(columnName)),
   filterByPlayerNameColumn: (name) => dispatch(filterByPlayerName(name)),
+  changePageNumber: (pageNumber) => dispatch(changePageNumber(pageNumber)),
 });
 
 const mapStateToProps = createStructuredSelector({
   playersRushing: makeSelectPlayersRushing(),
+  totalPlayers: makeSelectTotalPlayers(),
   loading: makeSelectLoading(),
   error: makeSelectError(),
   sortBy: makeSelectSortBy(),
   playerName: makeSelectPlayerName(),
+  pageNumber: makeSelectPageNumber(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
